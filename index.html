@@ -187,6 +187,58 @@ input,textarea,select{font:inherit;font-size:16px;color:var(--ink);-webkit-user-
 .dlg .btn{width:100%;margin-top:8px;flex:none;display:block}
 .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(43,35,64,.92);color:#fff;padding:10px 16px;border-radius:14px;font-weight:700;font-size:14px;z-index:300;max-width:88vw;text-align:center}
 
+/* ---------- transitions ---------- */
+@keyframes inL{from{transform:translateX(-36px);opacity:0}to{transform:none;opacity:1}}
+@keyframes inR{from{transform:translateX(36px);opacity:0}to{transform:none;opacity:1}}
+@keyframes inZ{from{transform:scale(.97);opacity:0}to{transform:none;opacity:1}}
+.in-l{animation:inL .3s cubic-bezier(.2,.8,.2,1)}
+.in-r{animation:inR .3s cubic-bezier(.2,.8,.2,1)}
+.in-z{animation:inZ .26s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){.in-l,.in-r,.in-z{animation:none}}
+
+/* ---------- multi-day & drag ---------- */
+.ev.cont-top{border-top-left-radius:0;border-top-right-radius:0}
+.ev.cont-bot{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.chip.cont{opacity:.85}
+.ev.ghost{background:rgba(123,92,250,.18);border:2px dashed var(--accent);border-inline-start:2px dashed var(--accent);color:var(--accent);pointer-events:none;box-shadow:0 4px 14px rgba(123,92,250,.25)}
+
+/* ---------- month view ---------- */
+.month{flex:1;display:flex;flex-direction:column;background:var(--card);min-height:0;overflow:hidden}
+.mhead{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line)}
+.mhead div{text-align:center;font-size:11.5px;color:var(--ink2);font-weight:700;padding:7px 0}
+.mhead div.sat{color:var(--accent)}
+.mgrid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);min-height:0}
+.mc{border-inline-start:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:3px 2px 2px;overflow:hidden;display:flex;flex-direction:column;gap:2px;min-width:0;cursor:pointer;position:relative}
+.mc.sat{background:#FBF9FF}
+.mc.hol{background:#FFF5F8}
+.mc.out{background:#FAF7F3}
+.mc.out .mn,.mc.out .mb,.mc.out .mh{opacity:.45}
+.mc .mn{font-size:12.5px;font-weight:800;width:23px;height:23px;line-height:23px;text-align:center;border-radius:50%;margin:0 auto 1px;flex:none}
+.mc.today .mn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.mh{font-size:9.5px;font-weight:700;padding:1px 3px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
+.mb{font-size:10px;line-height:1.4;padding:0 3px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:650;background:var(--cs);color:var(--ct);flex:none}
+.mb.ad{background:var(--c);color:#fff}
+.mmore{font-size:9.5px;color:var(--ink2);text-align:center;font-weight:800;flex:none}
+.mdot{position:absolute;top:5px;left:4px;width:5px;height:5px;border-radius:50%;background:var(--accent2)}
+
+/* ---------- recurrence editor ---------- */
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.quick button{padding:6px 11px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:13px;color:var(--ink2)}
+.quick button.on{border-color:var(--accent);color:var(--accent);background:var(--accentSoft)}
+.cyc{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:4px}
+.cyc b{min-width:22px;text-align:center;font-size:18px}
+.stp{width:34px;height:34px;border-radius:11px;background:#F1ECF7;font-size:20px;font-weight:800;color:var(--accent)}
+.wkrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line2)}
+.wkrow:last-child{border-bottom:0}
+.wkl{width:62px;flex:none;font-weight:700;font-size:13px;line-height:1.2}
+.wkl small{display:block;text-align:right;font-weight:500;color:var(--ink3);font-size:10.5px}
+.wkd{flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dchip{aspect-ratio:1;max-width:38px;width:100%;margin:0 auto;border-radius:50%;background:#F4F0F8;font-weight:800;font-size:12.5px;color:var(--ink2);position:relative}
+.dchip.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 2px 8px rgba(123,92,250,.3)}
+.dchip.start::after{content:"";position:absolute;bottom:-4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--accent)}
+.recsum{margin-top:10px;background:var(--accentSoft);color:#4B32B8;border-radius:12px;padding:9px 12px;font-size:13.5px;line-height:1.5}
+.seg button{padding:6px 13px}
+
 </style>
 </head>
 <body>
@@ -199,7 +251,7 @@ input,textarea,select{font:inherit;font-size:16px;color:var(--ink);-webkit-user-
       <button class="ibtn" id="btnSet" aria-label="הגדרות"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
     <div class="row2">
-      <div class="seg"><button data-v="week">שבוע</button><button data-v="day">יום</button></div>
+      <div class="seg"><button data-v="month">חודש</button><button data-v="week">שבוע</button><button data-v="day">יום</button></div>
       <div class="nav"><button class="ibtn" id="prev" aria-label="הקודם">›</button><button class="ibtn" id="next" aria-label="הבא">‹</button></div>
     </div>
   </header>
@@ -208,6 +260,7 @@ input,textarea,select{font:inherit;font-size:16px;color:var(--ink);-webkit-user-
     <div id="heads" class="cols-head"></div>
     <div id="allday" class="allday"></div>
     <div class="scroller"><div class="grid" id="grid"></div></div>
+    <div id="month" class="month" style="display:none"></div>
     <div class="zoomhint" id="zoomhint"></div>
     <button class="fab" id="fab" aria-label="אירוע חדש">+</button>
     <button class="todobar" id="todobar" style="display:none"></button>
@@ -227,6 +280,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const pad = n => String(n).padStart(2, '0');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const mod = (a, n) => ((a % n) + n) % n;
 
 const DAY = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
 const DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
@@ -244,6 +298,8 @@ const diffDays = (a, b) => Math.round((utc(b) - utc(a)) / 864e5);
 const dow = s => parse(s).getDay();
 const today = () => iso(new Date());
 const weekStart = s => addDays(s, -dow(s));
+const monthStart = s => s.slice(0, 8) + '01';
+const addMonths = (s, n) => { const d = parse(monthStart(s)); d.setMonth(d.getMonth() + n); return iso(d); };
 const toMin = t => { const [h, m] = (t || '0:0').split(':').map(Number); return h * 60 + m; };
 const fromMin = m => pad(Math.floor(m / 60) % 24) + ':' + pad(m % 60);
 const short = s => { const d = parse(s); return d.getDate() + '.' + (d.getMonth() + 1); };
@@ -260,15 +316,28 @@ const KEY = 'luz-data-v1', MKEY = 'luz-meta-v1';
 function defaults() {
   const c = (name, color, warn = false, rem = 40, dur = 60) => ({ id: uid(), name, color, warn, rem, dur });
   return {
-    v: 1,
+    v: 2,
     cats: [c('לימודים', '#4C7DF6', false, 40, 90), c('עבודה – מחקר', '#1FB8A6', true), c('עבודה – ניקיון', '#8BC34A', true), c('אימון', '#FF8A5B'), c('חברים', '#FF6FA3'), c('אירועים מיוחדים', '#7B5CFA')],
     events: [], dayTodos: {}, evTodos: {},
     settings: { rem: 40, until: '', sync: '' }
   };
 }
+// שדרוג מידע מגרסה קודמת: rep (שבוע/שבועיים) → rec גמיש, ו-span לאירועים רב-יומיים
+function migrate(D) {
+  for (const e of D.events || []) {
+    if (e.rec === undefined) {
+      if (e.rep) { const wd = dow(e.date); e.rec = { n: e.rep === 2 ? 2 : 1, a: weekStart(e.date), p: e.rep === 2 ? [[wd], []] : [[wd]] }; }
+      else e.rec = null;
+    }
+    delete e.rep;
+    if (e.span == null) e.span = 0;
+  }
+  D.v = 2; return D;
+}
 let S, M;
 try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { }
 if (!S || !S.cats) S = defaults();
+migrate(S);
 try { M = JSON.parse(localStorage.getItem(MKEY)) || {}; } catch (e) { M = {}; }
 const saveMeta = () => { try { localStorage.setItem(MKEY, JSON.stringify(M)); } catch (e) { } };
 function save() {
@@ -277,36 +346,57 @@ function save() {
   M.dirty = true; saveMeta(); scheduleSync();
 }
 const userName = () => (S.settings.name || '').trim();
-const senderName = () => userName() ? 'Be OnIt, ' + userName() + '\u200E!' : 'OnIt';
+const senderName = () => userName() ? 'Be OnIt, ' + userName() + '‎!' : 'OnIt';
 const cat = id => S.cats.find(c => c.id === id) || S.cats[0] || { name: '', color: '#999' };
 
-/* ---------- events & recurrence ---------- */
+/* ---------- recurrence ----------
+   rec = { n: אורך המחזור בשבועות, a: תחילת שבוע 1 (יום ראשון), p: [[ימים בשבוע 1], [ימים בשבוע 2], ...] } */
 function occurs(ev, d) {
-  if (!ev.rep) return ev.date === d;
-  const df = diffDays(ev.date, d);
-  if (df < 0 || df % (ev.rep === 2 ? 14 : 7)) return false;
-  if (ev.until && d > ev.until) return false;
-  return !(ev.ex && ev.ex.includes(d));
+  if (!ev.rec) return ev.date === d;
+  if (d < ev.date || (ev.until && d > ev.until)) return false;
+  if (ev.ex && ev.ex.includes(d)) return false;
+  const r = ev.rec, wk = mod(Math.round(diffDays(r.a, weekStart(d)) / 7), r.n);
+  return (r.p[wk] || []).includes(dow(d));
 }
 function occurrences(ev, from, to) {
-  if (!ev.rep) return ev.date >= from && ev.date <= to ? [ev.date] : [];
-  const step = ev.rep === 2 ? 14 : 7, out = [];
-  let df = diffDays(ev.date, from), k = df <= 0 ? 0 : Math.ceil(df / step);
-  for (let d = addDays(ev.date, k * step); d <= to && (!ev.until || d <= ev.until); d = addDays(d, step)) {
-    if (!(ev.ex && ev.ex.includes(d))) out.push(d);
-    if (out.length > 800) break;
-  }
+  if (!ev.rec) return ev.date >= from && ev.date <= to ? [ev.date] : [];
+  const out = [], start = from > ev.date ? from : ev.date, end = ev.until && ev.until < to ? ev.until : to;
+  for (let d = start; d <= end; d = addDays(d, 1)) { if (occurs(ev, d)) out.push(d); if (out.length > 1500) break; }
   return out;
 }
-const eventsOn = d => S.events.filter(e => occurs(e, d)).sort((a, b) => (b.allDay ? 1 : 0) - (a.allDay ? 1 : 0) || toMin(a.start) - toMin(b.start));
+// קטעים של אירועים ביום מסוים (כולל אירועים שהתחילו בימים קודמים ונמשכים)
+function segmentsOn(d) {
+  const out = [];
+  for (const e of S.events) {
+    const span = e.span || 0;
+    for (let k = 0; k <= span; k++) {
+      const o = k ? addDays(d, -k) : d;
+      if (!occurs(e, o)) continue;
+      let s = k === 0 ? toMin(e.start) : 0, en = k === span ? toMin(e.end) : 1440;
+      if (!e.allDay && en <= s) en = Math.min(s + 30, 1440);
+      out.push({ e, o, k, s, en, first: k === 0, last: k === span });
+    }
+  }
+  return out.sort((a, b) => (b.e.allDay ? 1 : 0) - (a.e.allDay ? 1 : 0) || a.s - b.s);
+}
 function seriesConflicts(ev) {
   const c = cat(ev.cat); if (!c.warn) return [];
-  const to = ev.rep ? (ev.until || addDays(ev.date, 365)) : ev.date;
+  const to = ev.rec ? (ev.until || addDays(ev.date, 365)) : ev.date;
   const out = [];
-  for (const d of occurrences(ev, ev.date, to)) for (const h of warnHolOn(d)) out.push({ d, n: h.n });
+  for (const o of occurrences(ev, ev.date, to)) for (let k = 0; k <= (ev.span || 0); k++) { const d = addDays(o, k); for (const h of warnHolOn(d)) out.push({ d, n: h.n }); }
   return out;
 }
 const tkey = (id, d) => id + '|' + d;
+const everyN = n => n === 1 ? 'כל שבוע' : n === 2 ? 'כל שבועיים' : 'כל ' + n + ' שבועות';
+const dayList = arr => { const n = [...arr].sort((a, b) => a - b).map(i => DAY[i]); return n.length < 2 ? n.join('') : n.slice(0, -1).join(', ') + ' ו' + n[n.length - 1]; };
+const dayPhrase = arr => (arr.length > 1 ? 'בימי ' : 'ביום ') + dayList(arr);
+function recText(r) {
+  if (!r) return 'לא חוזר';
+  const used = r.p.map((d, i) => [i, d]).filter(x => x[1].length);
+  if (!used.length) return 'צריך לבחור לפחות יום אחד';
+  if (used.length === 1 && used[0][0] === 0) return everyN(r.n) + ' ' + dayPhrase(used[0][1]);
+  return 'מחזור של ' + r.n + ' שבועות: ' + used.map(([i, d]) => 'בשבוע ' + (i + 1) + ' – ' + dayList(d)).join(' · ') + ', וחוזר חלילה';
+}
 
 /* ---------- view state ---------- */
 let view = localStorage.getItem('luz-view') || 'week';
@@ -316,19 +406,30 @@ let hourH = 48, hourMin = 20, hourMax = 160;
 /* ============================================================
    RENDER
    ============================================================ */
-function render() {
+function render(anim) {
+  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
+  const isMonth = view === 'month';
+  $('#month').style.display = isMonth ? '' : 'none';
+  ['#heads', '#allday', '.scroller'].forEach(s => $(s).style.display = isMonth ? 'none' : '');
+  if (isMonth) renderMonth(); else renderTime();
+  if (anim) animIn(anim);
+}
+function paneEls() { return view === 'month' ? [$('#month')] : [$('#heads'), $('#allday'), $('#grid')]; }
+function animIn(kind) {
+  for (const el of paneEls()) {
+    el.style.transition = 'none'; el.style.transform = ''; el.style.opacity = '';
+    el.classList.remove('in-l', 'in-r', 'in-z'); void el.offsetWidth; el.classList.add('in-' + kind);
+  }
+}
+
+function renderTime() {
   const days = view === 'week' ? [...Array(7)].map((_, i) => addDays(weekStart(cur), i)) : [cur];
   const t = today();
-  const app = $('#cal');
-  app.style.setProperty('--n', days.length);
-  $$('.seg button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
-
-  // title
+  $('#cal').style.setProperty('--n', days.length);
   const d0 = parse(days[0]), d6 = parse(days[days.length - 1]);
-  let title = MON[d0.getMonth()] + (d0.getMonth() !== d6.getMonth() ? '–' + MON[d6.getMonth()] : '');
+  const title = MON[d0.getMonth()] + (d0.getMonth() !== d6.getMonth() ? '–' + MON[d6.getMonth()] : '');
   $('#title').innerHTML = esc(title) + '<small>' + d6.getFullYear() + '</small>';
 
-  // day headers
   const head = $('#heads');
   head.className = 'cols-head' + (view === 'day' ? ' single' : '');
   head.innerHTML = '<div></div>' + days.map(d => {
@@ -337,19 +438,17 @@ function render() {
     return `<div class="dh ${d === t ? 'today' : ''} ${dd.getDay() === 6 ? 'sat' : ''}" data-d="${d}"><div class="dn">${DAYS[dd.getDay()]}</div><span class="dd">${dd.getDate()}</span>${open ? '<span class="dot"></span>' : ''}</div>`;
   }).join('');
 
-  // all-day row: holidays + all-day events
   let anyAd = false;
   const ad = $('#allday');
   ad.className = 'allday' + (view === 'day' ? ' single' : '');
   ad.innerHTML = '<div></div>' + days.map(d => {
     const items = holOn(d).map(h => `<div class="chip h-${h.t}">${esc(h.n)}</div>`)
-      .concat(eventsOn(d).filter(e => e.allDay).map(e => `<div class="chip ev-ad" data-ev="${e.id}" data-d="${d}" style="background:${cat(e.cat).color}">${esc(e.title || 'ללא שם')}${seriesConflicts(e).some(c => c.d === d) ? ' ⚠️' : ''}</div>`));
+      .concat(segmentsOn(d).filter(g => g.e.allDay).map(g => `<div class="chip ev-ad ${g.first ? '' : 'cont'}" data-ev="${g.e.id}" data-d="${g.o}" style="background:${cat(g.e.cat).color}">${g.first ? '' : '↤ '}${esc(g.e.title || 'ללא שם')}${cat(g.e.cat).warn && warnHolOn(d).length ? ' ⚠️' : ''}</div>`));
     if (items.length) anyAd = true;
     return `<div class="adc" data-d="${d}">${items.join('')}</div>`;
   }).join('');
   ad.classList.toggle('empty', !anyAd);
 
-  // grid
   const grid = $('#grid');
   grid.style.setProperty('--n', days.length);
   let g = '<div class="gut">' + [...Array(24)].map((_, h) => h ? `<span class="${h % 2 ? 'odd' : ''}" style="top:calc(var(--h) * ${h})">${pad(h)}:00</span>` : '').join('') + '</div>';
@@ -359,10 +458,8 @@ function render() {
   }
   grid.innerHTML = g;
   $('.scroller').classList.toggle('single', view === 'day');
-  grid.parentElement.classList.toggle('single', view === 'day');
   positionNow();
 
-  // day-view todo button
   const tb = $('#todobar');
   if (view === 'day') {
     const all = allTodos(cur), done = all.filter(x => x.done).length;
@@ -373,11 +470,7 @@ function render() {
 }
 
 function layoutDay(d) {
-  const evs = eventsOn(d).filter(e => !e.allDay).map(e => {
-    const s = toMin(e.start); let en = toMin(e.end); if (en <= s) en = Math.min(s + 30, 24 * 60);
-    return { e, s, en };
-  });
-  // overlap clusters
+  const evs = segmentsOn(d).filter(g => !g.e.allDay);
   let html = '', cluster = [], end = -1;
   const flush = () => {
     const cols = [];
@@ -405,13 +498,22 @@ function darken(hex, f) {
   const n = parseInt(hex.slice(1), 16);
   return `rgb(${Math.round((n >> 16) * f)},${Math.round(((n >> 8) & 255) * f)},${Math.round((n & 255) * f)})`;
 }
-function evBlock({ e, s, en }, d, l, w, z = 0) {
+const catVars = c => `--c:${c.color};--cs:${tint(c.color, .2)};--ct:${darken(c.color, .45)}`;
+function timeLabel(g) {
+  const e = g.e;
+  if (view === 'week') return g.first ? e.start : '↤ ' + (g.last ? 'עד ' + e.end : 'המשך');
+  if (!e.span) return e.start + '–' + e.end;
+  const endD = addDays(g.o, e.span);
+  return `${DAYS[dow(g.o)]} ${e.start} – ${DAYS[dow(endD)]} ${e.end}`;
+}
+function evBlock(g, d, l, w, z = 0) {
+  const { e, s, en } = g;
   const c = cat(e.cat), dur = (en - s) / 60;
   const conflict = c.warn && warnHolOn(d).length;
-  const td = S.evTodos[tkey(e.id, d)] || [];
-  const meta = view === 'day' ? `<div class="meta">${esc(c.name)}${e.rep ? ' · 🔁' : ''}${td.length ? ' · ✓ ' + td.filter(x => x.done).length + '/' + td.length : ''}${e.rem >= 0 ? ' · 🔔' : ''}</div>` : '';
-  return `<div class="ev ${dur < 0.75 ? 'short' : ''}" data-ev="${e.id}" data-d="${d}" style="z-index:${2 + z};--s:${s / 60};--d:${dur};--l:${l};--w:${w};--c:${c.color};--cs:${tint(c.color, .2)};--ct:${darken(c.color, .45)}">
-    ${conflict ? '<span class="wa">⚠️</span>' : ''}<div class="t">${esc(e.title || 'ללא שם')}</div><div class="tm"><span dir="ltr">${view === 'week' ? e.start : e.start + '–' + e.end}</span></div>${meta}</div>`;
+  const td = S.evTodos[tkey(e.id, g.o)] || [];
+  const meta = view === 'day' ? `<div class="meta">${esc(c.name)}${e.rec ? ' · 🔁' : ''}${td.length ? ' · ✓ ' + td.filter(x => x.done).length + '/' + td.length : ''}${e.rem >= 0 ? ' · 🔔' : ''}</div>` : '';
+  return `<div class="ev ${dur < 0.75 ? 'short' : ''} ${g.first ? '' : 'cont-top'} ${g.last ? '' : 'cont-bot'}" data-ev="${e.id}" data-d="${g.o}" style="z-index:${2 + z};--s:${s / 60};--d:${dur};--l:${l};--w:${w};${catVars(c)}">
+    ${conflict ? '<span class="wa">⚠️</span>' : ''}<div class="t">${esc(e.title || 'ללא שם')}</div><div class="tm"><span dir="ltr">${timeLabel(g)}</span></div>${meta}</div>`;
 }
 function positionNow() {
   const nl = $('.nowline'); if (!nl) return;
@@ -420,58 +522,167 @@ function positionNow() {
 setInterval(() => { if ($('.nowline')) positionNow(); if (today() !== lastDay) { lastDay = today(); render(); } }, 60000);
 let lastDay = today();
 
+/* ---------- month view ---------- */
+function renderMonth() {
+  const ms = monthStart(cur), md = parse(ms), t = today();
+  $('#title').innerHTML = esc(MON[md.getMonth()]) + '<small>' + md.getFullYear() + '</small>';
+  const first = weekStart(ms), lastOfMonth = addDays(addMonths(ms, 1), -1);
+  const rows = Math.ceil((diffDays(first, lastOfMonth) + 1) / 7);
+  const avail = Math.max(300, $('#cal').clientHeight - 30);
+  const cellH = avail / rows, maxBars = Math.max(1, Math.floor((cellH - 28) / 15));
+  let h = '<div class="mhead">' + DAYS.map((d, i) => `<div class="${i === 6 ? 'sat' : ''}">${d}</div>`).join('') + '</div>';
+  h += `<div class="mgrid" style="grid-template-rows:repeat(${rows},1fr)">`;
+  for (let i = 0; i < rows * 7; i++) {
+    const d = addDays(first, i), out = d.slice(0, 7) !== ms.slice(0, 7);
+    const hol = holOn(d), segs = segmentsOn(d), warn = warnHolOn(d).length;
+    let items = [];
+    if (hol.length) items.push(`<div class="mh h-${hol[0].t}">${esc(hol[0].n)}</div>`);
+    for (const g of segs) {
+      const c = cat(g.e.cat);
+      items.push(`<div class="mb ${g.e.allDay ? 'ad' : ''}" style="${catVars(c)}">${g.first ? '' : '↤'}${esc(g.e.title || 'ללא שם')}</div>`);
+    }
+    const shown = items.slice(0, maxBars), more = items.length - shown.length;
+    h += `<div class="mc ${out ? 'out' : ''} ${d === t ? 'today' : ''} ${warn ? 'hol' : ''} ${dow(d) === 6 ? 'sat' : ''}" data-d="${d}"><div class="mn">${parse(d).getDate()}</div>${shown.join('')}${more > 0 ? `<div class="mmore">+${more}</div>` : ''}${openTodos(d) ? '<span class="mdot"></span>' : ''}</div>`;
+  }
+  $('#month').innerHTML = h + '</div>';
+  $('#todobar').style.display = 'none';
+}
+
 /* ---------- zoom (pinch) ---------- */
 const scroller = () => $('.scroller');
-function bounds() { const H = scroller().clientHeight - 10; hourMin = H / 24; hourMax = H / 3; return H; }
+function bounds() { const H = scroller().clientHeight - 10; if (H > 50) { hourMin = H / 24; hourMax = H / 3; } return H; }
 function applyH() { $('#grid').style.setProperty('--h', hourH + 'px'); $('#grid').classList.toggle('dense', hourH < 26); }
 function setH(h) { hourH = Math.max(hourMin, Math.min(hourMax, h)); applyH(); }
 function resetZoom(scrollTo) {
-  const H = bounds(); hourH = H / 12; applyH();
+  if (view === 'month') return;
+  const H = bounds(); if (H > 50) hourH = H / 12; applyH();
   const n = new Date(); let start = 8;
   if (scrollTo === 'now') start = Math.max(0, n.getHours() + n.getMinutes() / 60 - 2.5);
   scroller().scrollTop = start * hourH;
 }
-let pinch = null, zt;
+let zt;
 function showZoom() {
   const z = $('#zoomhint'); z.textContent = Math.round(scroller().clientHeight / hourH) + ' שעות במסך';
   z.classList.add('on'); clearTimeout(zt); zt = setTimeout(() => z.classList.remove('on'), 700);
 }
+
+/* ---------- navigation with transitions ---------- */
+function go(dir) {
+  if (view === 'month') cur = addMonths(cur, dir);
+  else cur = addDays(cur, dir * (view === 'week' ? 7 : 1));
+  const st = view === 'month' ? 0 : scroller().scrollTop;
+  render(dir > 0 ? 'l' : 'r'); // בעברית העתיד משמאל
+  if (view !== 'month') scroller().scrollTop = st;
+}
+function followSwipe(dx) {
+  for (const el of paneEls()) { el.classList.remove('in-l', 'in-r', 'in-z'); el.style.transition = 'none'; el.style.transform = `translateX(${dx * 0.55}px)`; el.style.opacity = String(Math.max(0.35, 1 - Math.abs(dx) / 500)); }
+}
+function endSwipe(dx) {
+  const els = paneEls();
+  if (Math.abs(dx) > 70) {
+    els.forEach(el => { el.style.transition = 'transform .12s ease-in, opacity .12s ease-in'; el.style.transform = `translateX(${dx > 0 ? 90 : -90}px)`; el.style.opacity = '0'; });
+    setTimeout(() => go(dx > 0 ? 1 : -1), 110);
+  } else els.forEach(el => { el.style.transition = 'transform .2s ease, opacity .2s ease'; el.style.transform = ''; el.style.opacity = ''; });
+}
+
+/* ---------- gestures: pinch, swipe, long-press drag to create ---------- */
+let drag = null, suppressClick = 0;
 function initGestures() {
   const sc = scroller();
   const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY) || 1;
-  let sw = null;
+  let pinch = null, sw = null, lp = null;
+
+  const minAt = (col, y) => Math.max(0, Math.min(1440, Math.round((y - col.getBoundingClientRect().top) / hourH * 4) * 15));
+  const startDrag = (col, y) => {
+    const m = Math.min(1425, Math.floor((y - col.getBoundingClientRect().top) / hourH * 4) * 15);
+    const gh = document.createElement('div'); gh.className = 'ev ghost';
+    col.appendChild(gh);
+    drag = { col, a: m, b: m + 60, gh, y };
+    updDrag(); navigator.vibrate && navigator.vibrate(12);
+  };
+  const updDrag = () => {
+    const s = Math.min(drag.a, drag.b), en = Math.max(drag.a, drag.b, s + 15);
+    drag.s = s; drag.en = en;
+    drag.gh.style.cssText = `--s:${s / 60};--d:${(en - s) / 60};--l:0;--w:1;z-index:9`;
+    drag.gh.innerHTML = `<div class="t">אירוע חדש</div><div class="tm"><span dir="ltr">${fromMin(s)}–${en >= 1440 ? '24:00' : fromMin(en)}</span></div>`;
+  };
+  const moveDrag = y => {
+    const m = minAt(drag.col, y);
+    drag.b = m <= drag.a ? m : Math.max(m, drag.a + 15);
+    // גלילה אוטומטית ליד הקצוות
+    const r = sc.getBoundingClientRect();
+    if (y > r.bottom - 40) sc.scrollTop += 8; else if (y < r.top + 40) sc.scrollTop -= 8;
+    updDrag();
+  };
+  const finishDrag = () => {
+    const { col, s, en, gh } = drag; drag = null; suppressClick = Date.now();
+    setTimeout(() => gh.remove(), 300);
+    newEvent(col.dataset.d, s, Math.min(en, 1439));
+  };
+
   sc.addEventListener('touchstart', e => {
     if (e.touches.length === 2) {
-      e.preventDefault(); sw = null;
+      e.preventDefault(); sw = null; clearTimeout(lp);
+      if (drag) { drag.gh.remove(); drag = null; }
       const top = sc.getBoundingClientRect().top, mid = (e.touches[0].clientY + e.touches[1].clientY) / 2 - top;
       pinch = { d: dist(e.touches), h: hourH, mid, anchor: (sc.scrollTop + mid) / hourH };
-    } else if (e.touches.length === 1) sw = { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() };
+    } else if (e.touches.length === 1) {
+      const t0 = e.touches[0];
+      sw = { x: t0.clientX, y: t0.clientY, t: Date.now(), dir: null };
+      const col = e.target.closest('.col');
+      if (col && !e.target.closest('.ev')) lp = setTimeout(() => { sw = null; startDrag(col, t0.clientY); }, 380);
+    }
   }, { passive: false });
   sc.addEventListener('touchmove', e => {
     if (pinch && e.touches.length === 2) {
-      e.preventDefault();
-      setH(pinch.h * dist(e.touches) / pinch.d);
-      sc.scrollTop = pinch.anchor * hourH - pinch.mid; showZoom();
+      e.preventDefault(); setH(pinch.h * dist(e.touches) / pinch.d);
+      sc.scrollTop = pinch.anchor * hourH - pinch.mid; showZoom(); return;
+    }
+    if (drag) { e.preventDefault(); moveDrag(e.touches[0].clientY); return; }
+    if (sw && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - sw.x, dy = e.touches[0].clientY - sw.y;
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) clearTimeout(lp);
+      if (!sw.dir && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) sw.dir = Math.abs(dx) > Math.abs(dy) * 1.3 ? 'h' : 'v';
+      if (sw.dir === 'h') { e.preventDefault(); followSwipe(dx); }
     }
   }, { passive: false });
   sc.addEventListener('touchend', e => {
+    clearTimeout(lp);
     if (e.touches.length < 2) pinch = null;
-    if (sw && e.changedTouches.length === 1 && !e.touches.length) {
-      const dx = e.changedTouches[0].clientX - sw.x, dy = e.changedTouches[0].clientY - sw.y;
-      if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && Date.now() - sw.t < 700) go(dx > 0 ? 1 : -1);
-      sw = null;
-    }
+    if (drag && !e.touches.length) { e.preventDefault(); finishDrag(); return; }
+    if (sw && sw.dir === 'h' && !e.touches.length) endSwipe(e.changedTouches[0].clientX - sw.x);
+    sw = null;
   });
+  sc.addEventListener('touchcancel', () => { clearTimeout(lp); if (drag) { drag.gh.remove(); drag = null; } if (sw && sw.dir === 'h') endSwipe(0); sw = null; });
+
+  // עכבר (מחשב): גרירה ישירה ליצירת אירוע
+  sc.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    const col = e.target.closest('.col'); if (!col || e.target.closest('.ev')) return;
+    const y0 = e.clientY; let started = false;
+    const mm = ev => { if (!started && Math.abs(ev.clientY - y0) > 6) { started = true; startDrag(col, y0); } if (drag) moveDrag(ev.clientY); };
+    const mu = () => { document.removeEventListener('mousemove', mm); document.removeEventListener('mouseup', mu); if (drag) finishDrag(); };
+    document.addEventListener('mousemove', mm); document.addEventListener('mouseup', mu);
+  });
+
+  // תצוגת חודש: החלקה
+  const mo = $('#month'); let ms = null;
+  mo.addEventListener('touchstart', e => { if (e.touches.length === 1) ms = { x: e.touches[0].clientX, y: e.touches[0].clientY, dir: null }; }, { passive: true });
+  mo.addEventListener('touchmove', e => {
+    if (!ms) return; const dx = e.touches[0].clientX - ms.x, dy = e.touches[0].clientY - ms.y;
+    if (!ms.dir && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) ms.dir = Math.abs(dx) > Math.abs(dy) * 1.3 ? 'h' : 'v';
+    if (ms.dir === 'h') { e.preventDefault(); followSwipe(dx); }
+  }, { passive: false });
+  mo.addEventListener('touchend', e => { if (ms && ms.dir === 'h') { suppressClick = Date.now(); endSwipe(e.changedTouches[0].clientX - ms.x); } ms = null; });
+
   document.addEventListener('gesturestart', e => e.preventDefault());
   document.addEventListener('gesturechange', e => e.preventDefault());
-  // במחשב: ctrl+גלגלת לזום
   sc.addEventListener('wheel', e => {
     if (!e.ctrlKey) return; e.preventDefault();
     const mid = e.clientY - sc.getBoundingClientRect().top, anchor = (sc.scrollTop + mid) / hourH;
     setH(hourH * (e.deltaY < 0 ? 1.1 : 0.9)); sc.scrollTop = anchor * hourH - mid; showZoom();
   }, { passive: false });
 }
-function go(dir) { cur = addDays(cur, dir * (view === 'week' ? 7 : 1)); const st = scroller().scrollTop; render(); scroller().scrollTop = st; }
 
 /* ============================================================
    UI helpers: sheets, dialogs, toast
@@ -513,38 +724,55 @@ function toast(msg, ms = 2200) {
 /* ============================================================
    EVENT EDITOR
    ============================================================ */
-function newEvent(d, startMin) {
+function newEvent(d, startMin, endMin) {
   const c = S.cats[0];
   const s = startMin ?? Math.min(23 * 60, (d === today() ? new Date().getHours() + 1 : 9) * 60);
-  openEditor({ id: null, title: '', cat: c.id, date: d, start: fromMin(s), end: fromMin(Math.min(s + (c.dur || 60), 23 * 60 + 59)), allDay: false, rep: 0, until: S.settings.until || '', rem: c.rem ?? S.settings.rem, notes: '' }, d);
+  const en = endMin ?? Math.min(s + (c.dur || 60), 23 * 60 + 59);
+  openEditor({ id: null, title: '', cat: c.id, date: d, start: fromMin(s), end: fromMin(en), span: 0, allDay: false, rec: null, until: S.settings.until || '', rem: c.rem ?? S.settings.rem, notes: '', _fixedEnd: endMin != null }, d);
 }
+const absMin = (date, time) => diffDays('2000-01-01', date) * 1440 + toMin(time);
 function openEditor(src, occDate) {
   const isNew = !src.id;
   const e = JSON.parse(JSON.stringify(src));
-  if (!isNew && e.rep) e.date = occDate; // עורכים את המופע הזה (תאריך תצוגה)
+  if (!isNew && e.rec) e.date = occDate;
   const tk = isNew ? null : tkey(src.id, occDate);
   let todos = JSON.parse(JSON.stringify(isNew ? [] : (S.evTodos[tk] || [])));
   let catTouched = false;
+  // החזרתיות מוצגת יחסית לשבוע של המופע הנוכחי (שבוע 1 = השבוע הזה)
+  let rec = null;
+  if (src.rec) {
+    const off = mod(Math.round(diffDays(src.rec.a, weekStart(occDate)) / 7), src.rec.n);
+    rec = { n: src.rec.n, a: weekStart(occDate), p: [...Array(src.rec.n)].map((_, i) => [...(src.rec.p[(i + off) % src.rec.n] || [])]) };
+  }
+  const recOrigJSON = JSON.stringify(rec);
+  const endDate0 = addDays(e.date, e.span || 0);
 
   const body = `
-    ${!isNew && src.rep ? `<div class="recur">🔁 אירוע חוזר ${src.rep === 2 ? 'כל שבועיים' : 'כל שבוע'}${src.until ? ' עד ' + short(src.until) : ''} · עורכת את ${esc(longDate(occDate))}</div>` : ''}
+    ${!isNew && src.rec ? `<div class="recur">🔁 ${esc(recText(src.rec))}${src.until ? ' · עד ' + short(src.until) : ''}<br>עורכת את ${esc(longDate(occDate))}</div>` : ''}
     <div class="card"><input class="bigtitle" id="f-title" placeholder="מה בלו״ז?" value="${esc(e.title)}" maxlength="120"></div>
     <div class="card"><div class="lbl">קטגוריה</div><div class="cats" id="f-cats"></div></div>
     <div id="f-warn"></div>
     <div class="card">
       <div class="tog"><span>כל היום</span><div class="sw ${e.allDay ? 'on' : ''}" id="f-allday"></div></div>
-      <div style="margin-top:10px"><div class="lbl">תאריך</div><input type="date" class="field" id="f-date" value="${e.date}"></div>
-      <div class="row" id="f-times" style="margin-top:10px;${e.allDay ? 'display:none' : ''}">
-        <div><div class="lbl">התחלה</div><input type="time" class="field" id="f-start" value="${e.start}"></div>
-        <div><div class="lbl">סיום</div><input type="time" class="field" id="f-end" value="${e.end}"></div>
-      </div>
+      <div class="lbl" style="margin-top:12px">מתחיל</div>
+      <div class="row"><input type="date" class="field" id="f-date" value="${e.date}"><input type="time" class="field tf" id="f-start" value="${e.start}"></div>
+      <div class="lbl" style="margin-top:10px">מסתיים</div>
+      <div class="row"><input type="date" class="field" id="f-edate" value="${endDate0}"><input type="time" class="field tf" id="f-end" value="${e.end}"></div>
+      <div class="hint" id="f-dur"></div>
     </div>
     <div class="card">
       <div class="lbl">חזרה</div>
-      <div class="segs" id="f-rep"><button data-r="0">לא חוזר</button><button data-r="1">כל שבוע</button><button data-r="2">כל שבועיים</button></div>
-      <div id="f-untilw" style="margin-top:10px">
-        <div class="lbl">עד תאריך (סוף הסמסטר)</div><input type="date" class="field" id="f-until" value="${e.until || ''}">
-        <div class="hint" id="f-rephint"></div>
+      <div class="segs" id="f-rep"><button data-r="0">לא חוזר</button><button data-r="1">חוזר</button></div>
+      <div id="f-recw" style="margin-top:12px">
+        <div class="quick" id="f-quick">
+          <button data-q="w1">כל שבוע</button><button data-q="w2">כל שבועיים</button><button data-q="w3">כל 3 שבועות</button><button data-q="wd">א׳–ה׳</button>
+        </div>
+        <div class="cyc"><span>מחזור של</span><button class="stp" data-s="-1">−</button><b id="f-n">1</b><button class="stp" data-s="1">+</button><span id="f-nw">שבוע</span></div>
+        <div class="hint" style="margin:2px 0 6px">מסמנים באיזה ימים האירוע קורה בכל שבוע של המחזור. אחרי השבוע האחרון חוזרים לשבוע 1.</div>
+        <div id="f-wk"></div>
+        <div class="recsum" id="f-sum"></div>
+        <div class="lbl" style="margin-top:12px">עד תאריך (סוף הסמסטר)</div><input type="date" class="field" id="f-until" value="${e.until || ''}">
+        <div class="hint">בלי תאריך סיום – חוזר בלי סוף.</div>
       </div>
     </div>
     <div class="card"><div class="lbl">תזכורת במייל</div>
@@ -557,97 +785,167 @@ function openEditor(src, occDate) {
     ${isNew ? '' : `<div class="btns"><button class="btn sm" id="f-dup">שכפול</button><button class="btn sm del" id="f-del">מחיקה</button></div>`}`;
 
   openSheet(isNew ? 'אירוע חדש' : 'עריכת אירוע', body, sh => {
-    const drawCats = () => {
-      $('#f-cats', sh).innerHTML = S.cats.map(c => `<button class="cat ${c.id === e.cat ? 'on' : ''}" data-c="${c.id}" style="--c:${c.color}"><i></i>${esc(c.name)}</button>`).join('');
+    const v = id => $(id, sh);
+    const drawCats = () => { v('#f-cats').innerHTML = S.cats.map(c => `<button class="cat ${c.id === e.cat ? 'on' : ''}" data-c="${c.id}" style="--c:${c.color}"><i></i>${esc(c.name)}</button>`).join(''); };
+    const startDate = () => v('#f-date').value || e.date;
+    const drawRec = () => {
+      $$('#f-rep button', sh).forEach(b => b.classList.toggle('on', +b.dataset.r === (rec ? 1 : 0)));
+      v('#f-recw').style.display = rec ? '' : 'none';
+      if (!rec) return;
+      if (isNew || !src.rec) rec.a = weekStart(startDate());
+      v('#f-n').textContent = rec.n; v('#f-nw').textContent = rec.n === 1 ? 'שבוע' : 'שבועות';
+      const sd = startDate();
+      v('#f-wk').innerHTML = rec.p.map((days, i) => {
+        const from = addDays(rec.a, i * 7);
+        return `<div class="wkrow"><div class="wkl">${rec.n > 1 ? 'שבוע ' + (i + 1) : 'כל שבוע'}<small dir="ltr">${rec.n > 1 ? short(from) + '–' + short(addDays(from, 6)) : ''}</small></div><div class="wkd">${[0, 1, 2, 3, 4, 5, 6].map(dd => {
+          const date = addDays(from, dd);
+          return `<button class="dchip ${days.includes(dd) ? 'on' : ''} ${rec.n > 1 && date === sd ? 'start' : ''}" data-w="${i}" data-dd="${dd}">${DAYS[dd]}</button>`;
+        }).join('')}</div></div>`;
+      }).join('');
+      const firstOcc = occurrences({ date: sd, rec, until: v('#f-until').value, ex: [] }, sd, addDays(sd, 7 * rec.n * 2))[0];
+      v('#f-sum').innerHTML = `🔁 <b>${esc(recText(rec))}</b>${firstOcc ? `<br>המופע הראשון: ${esc(longDate(firstOcc))}` : ''}`;
+      v('#f-quick').querySelectorAll('button').forEach(b => b.classList.toggle('on', quickMatch(b.dataset.q)));
     };
-    const drawRep = () => {
-      $$('#f-rep button', sh).forEach(b => b.classList.toggle('on', +b.dataset.r === e.rep));
-      $('#f-untilw', sh).style.display = e.rep ? '' : 'none';
-      const dn = DAY[dow($('#f-date', sh).value || e.date)];
-      $('#f-rephint', sh).textContent = e.rep ? `יחזור כל ${e.rep === 2 ? 'שבועיים' : 'שבוע'} ביום ${dn}, החל מ-${short($('#f-date', sh).value || e.date)}. אם לא תבחרי תאריך סיום – הוא יחזור בלי סוף.` : '';
+    const quickRec = q => {
+      const wd = dow(startDate());
+      if (q === 'w1') return { n: 1, p: [[wd]] };
+      if (q === 'w2') return { n: 2, p: [[wd], []] };
+      if (q === 'w3') return { n: 3, p: [[wd], [], []] };
+      if (q === 'wd') return { n: 1, p: [[0, 1, 2, 3, 4]] };
+    };
+    const quickMatch = q => { const r = quickRec(q); return rec && r.n === rec.n && JSON.stringify(r.p.map(x => [...x].sort())) === JSON.stringify(rec.p.map(x => [...x].sort())); };
+    const durText = () => {
+      const a = absMin(startDate(), e.allDay ? '00:00' : v('#f-start').value), b = absMin(v('#f-edate').value || startDate(), e.allDay ? '00:00' : v('#f-end').value);
+      const days = diffDays(startDate(), v('#f-edate').value || startDate());
+      if (e.allDay) { v('#f-dur').textContent = days > 0 ? `${days + 1} ימים` : ''; return; }
+      const m = b - a; if (m <= 0) { v('#f-dur').textContent = '⚠️ הסיום לפני ההתחלה'; return; }
+      const h = Math.floor(m / 60), mm = m % 60;
+      v('#f-dur').textContent = 'משך: ' + (h >= 24 ? Math.floor(h / 24) + ' ימים ו-' + (h % 24) + ' שעות' : (h ? h + ' שעות' : '') + (h && mm ? ' ו-' : '') + (mm ? mm + ' דקות' : ''));
     };
     const drawWarn = () => {
       read();
       const cf = seriesConflicts(e);
-      $('#f-warn', sh).innerHTML = cf.length ? `<div class="warnbox">⚠️ <b>שימי לב:</b> ${cat(e.cat).name} ${cf.length === 1 ? 'נופל' : 'נופלת'} על:<br>${cf.slice(0, 8).map(c => `${esc(c.n)} (${DAYS[dow(c.d)]} ${short(c.d)})`).join('<br>')}${cf.length > 8 ? `<br>ועוד ${cf.length - 8}…` : ''}</div>` : '';
+      v('#f-warn').innerHTML = cf.length ? `<div class="warnbox">⚠️ <b>שימי לב:</b> ${esc(cat(e.cat).name)} ${cf.length === 1 ? 'נופל' : 'נופלת'} על:<br>${cf.slice(0, 8).map(c => `${esc(c.n)} (${DAYS[dow(c.d)]} ${short(c.d)})`).join('<br>')}${cf.length > 8 ? `<br>ועוד ${cf.length - 8}…` : ''}</div>` : '';
     };
     const read = () => {
-      e.title = $('#f-title', sh).value.trim();
-      e.date = $('#f-date', sh).value || e.date;
-      e.start = $('#f-start', sh).value || e.start; e.end = $('#f-end', sh).value || e.end;
-      e.until = e.rep ? $('#f-until', sh).value : '';
-      e.rem = +$('#f-rem', sh).value; e.notes = $('#f-notes', sh).value;
+      e.title = v('#f-title').value.trim();
+      e.date = startDate();
+      e.start = e.allDay ? '00:00' : (v('#f-start').value || e.start);
+      e.end = e.allDay ? '23:59' : (v('#f-end').value || e.end);
+      e.span = Math.max(0, diffDays(e.date, v('#f-edate').value || e.date));
+      e.rec = rec ? { n: rec.n, a: rec.a, p: rec.p.map(x => [...x].sort((a, b) => a - b)) } : null;
+      e.until = rec ? v('#f-until').value : '';
+      e.rem = +v('#f-rem').value; e.notes = v('#f-notes').value;
     };
-    const drawTodos = () => {
-      $('#f-todos', sh).innerHTML = `<h3>✓ משימות לאירוע${e.rep ? ' <small>(למופע הזה)</small>' : ''}</h3>` + todoListHTML(todos, 'ev');
-    };
-    drawCats(); drawRep(); drawTodos(); drawWarn();
+    const drawTodos = () => { v('#f-todos').innerHTML = `<h3>✓ משימות לאירוע${src.rec ? ' <small>(למופע הזה)</small>' : ''}</h3>` + todoListHTML(todos, 'ev'); };
+    const showTimes = () => { $$('.tf', sh).forEach(x => x.style.display = e.allDay ? 'none' : ''); };
+    drawCats(); drawRec(); drawTodos(); showTimes(); durText(); drawWarn();
 
-    $('#f-cats', sh).addEventListener('click', ev => {
+    v('#f-cats').addEventListener('click', ev => {
       const b = ev.target.closest('[data-c]'); if (!b) return;
       e.cat = b.dataset.c; catTouched = true; const c = cat(e.cat);
-      if (isNew) { // ברירות מחדל של הקטגוריה
-        e.rem = c.rem ?? S.settings.rem; $('#f-rem', sh).value = e.rem;
-        const s = toMin($('#f-start', sh).value); $('#f-end', sh).value = fromMin(Math.min(s + (c.dur || 60), 23 * 60 + 59));
+      if (isNew) {
+        e.rem = c.rem ?? S.settings.rem; v('#f-rem').value = e.rem;
+        if (!src._fixedEnd) { const s = toMin(v('#f-start').value); v('#f-end').value = fromMin(Math.min(s + (c.dur || 60), 23 * 60 + 59)); v('#f-edate').value = startDate(); durText(); }
       }
       drawCats(); drawWarn();
     });
-    $('#f-allday', sh).addEventListener('click', ev => { e.allDay = !e.allDay; ev.currentTarget.classList.toggle('on', e.allDay); $('#f-times', sh).style.display = e.allDay ? 'none' : ''; });
-    $('#f-rep', sh).addEventListener('click', ev => {
-      const b = ev.target.closest('[data-r]'); if (!b) return; e.rep = +b.dataset.r;
-      if (e.rep && !$('#f-until', sh).value && S.settings.until) $('#f-until', sh).value = S.settings.until;
-      drawRep(); drawWarn();
+    v('#f-allday').addEventListener('click', ev => { e.allDay = !e.allDay; ev.currentTarget.classList.toggle('on', e.allDay); showTimes(); durText(); drawWarn(); });
+    v('#f-rep').addEventListener('click', ev => {
+      const b = ev.target.closest('[data-r]'); if (!b) return;
+      if (+b.dataset.r) { if (!rec) { rec = { ...quickRec('w1'), a: weekStart(startDate()) }; if (!v('#f-until').value && S.settings.until) v('#f-until').value = S.settings.until; } }
+      else rec = null;
+      drawRec(); drawWarn();
     });
-    let lastStart = $('#f-start', sh).value;
-    $('#f-start', sh).addEventListener('change', ev => { // שמירה על אורך האירוע כשמזיזים התחלה
-      const d = toMin($('#f-end', sh).value) - toMin(lastStart), s = toMin(ev.target.value);
-      if (d > 0) $('#f-end', sh).value = fromMin(Math.min(s + d, 23 * 60 + 59)); lastStart = ev.target.value;
+    v('#f-quick').addEventListener('click', ev => { const b = ev.target.closest('[data-q]'); if (!b) return; rec = { ...quickRec(b.dataset.q), a: rec.a }; drawRec(); drawWarn(); });
+    $$('.stp', sh).forEach(b => b.addEventListener('click', () => {
+      const n = Math.max(1, Math.min(8, rec.n + +b.dataset.s)); if (n === rec.n) return;
+      rec.p = n > rec.n ? rec.p.concat([...Array(n - rec.n)].map(() => [])) : rec.p.slice(0, n); rec.n = n; drawRec(); drawWarn();
+    }));
+    v('#f-wk').addEventListener('click', ev => {
+      const b = ev.target.closest('.dchip'); if (!b) return;
+      const w = +b.dataset.w, dd = +b.dataset.dd, arr = rec.p[w];
+      rec.p[w] = arr.includes(dd) ? arr.filter(x => x !== dd) : [...arr, dd];
+      drawRec(); drawWarn();
     });
-    ['#f-date', '#f-until'].forEach(id => $(id, sh).addEventListener('change', () => { drawRep(); drawWarn(); }));
-    bindTodoList($('#f-todos', sh), () => todos, t => { todos = t; drawTodos(); });
+    // שינוי התחלה מזיז גם את הסיום (שומר על משך האירוע)
+    let last = { d: startDate(), t: v('#f-start').value };
+    const shiftEnd = () => {
+      const dur = absMin(v('#f-edate').value || last.d, v('#f-end').value) - absMin(last.d, last.t);
+      const nd = startDate(), nt = v('#f-start').value;
+      if (dur >= 0) {
+        const endAbs = absMin(nd, nt) + dur, ed = addDays('2000-01-01', Math.floor(endAbs / 1440));
+        v('#f-edate').value = ed; v('#f-end').value = fromMin(mod(endAbs, 1440));
+      }
+      last = { d: nd, t: nt }; durText(); drawRec(); drawWarn();
+    };
+    v('#f-date').addEventListener('change', shiftEnd);
+    v('#f-start').addEventListener('change', shiftEnd);
+    ['#f-edate', '#f-end'].forEach(id => v(id).addEventListener('change', () => { durText(); drawWarn(); }));
+    v('#f-until').addEventListener('change', () => { drawRec(); drawWarn(); });
+    bindTodoList(v('#f-todos'), () => todos, t => { todos = t; drawTodos(); });
 
-    $('#f-save', sh).addEventListener('click', async () => {
+    v('#f-save').addEventListener('click', async () => {
       read();
-      if (!e.allDay && toMin(e.end) <= toMin(e.start)) { toast('שעת הסיום צריכה להיות אחרי שעת ההתחלה'); return; }
-      if (e.rep && e.until && e.until < e.date) { toast('תאריך הסיום של החזרה לפני תאריך ההתחלה'); return; }
+      const ed = v('#f-edate').value || e.date;
+      if (ed < e.date) return toast('תאריך הסיום לפני תאריך ההתחלה');
+      if (!e.allDay && absMin(ed, e.end) <= absMin(e.date, e.start)) return toast('הסיום צריך להיות אחרי ההתחלה');
+      if (e.rec && !e.rec.p.some(x => x.length)) return toast('צריך לבחור לפחות יום אחד לחזרה');
+      if (e.rec && e.until && e.until < e.date) return toast('תאריך הסיום של החזרה לפני תאריך ההתחלה');
+      if (e.rec && !occurrences(e, e.date, addDays(e.date, 7 * e.rec.n + 7)).length) return toast('לפי ההגדרות האירוע לא יקרה אף פעם – כדאי לבדוק את הימים');
+      const recChanged = JSON.stringify(rec) !== recOrigJSON;
       const cf = seriesConflicts(e);
-      if (cf.length && (isNew || catTouched || e.date !== occDate || e.rep !== src.rep || e.until !== src.until)) {
+      if (cf.length && (isNew || catTouched || e.date !== occDate || recChanged || e.until !== src.until || e.span !== (src.span || 0))) {
         const ok = await ask('⚠️ שימי לב', `${cat(e.cat).name} בתאריך שהוא:\n${cf.slice(0, 6).map(c => `${c.n} – ${DAYS[dow(c.d)]} ${short(c.d)}`).join('\n')}${cf.length > 6 ? '\nועוד…' : ''}`, [{ t: 'לשמור בכל זאת', v: 1, cls: 'pri' }, { t: 'חזרה לעריכה', v: 0 }]);
         if (!ok) return;
       }
-      if (e.rep && e.until) S.settings.until = e.until;
+      if (e.rec && e.until) S.settings.until = e.until;
       if (isNew) {
         e.id = uid(); S.events.push(clean(e));
         if (todos.length) S.evTodos[tkey(e.id, e.date)] = todos;
-      } else if (src.rep) {
-        const scope = await ask('אירוע חוזר', 'על מה לשמור את השינוי?', [{ t: 'רק על המופע הזה', v: 'one', cls: 'pri' }, { t: 'על כל הסדרה', v: 'all' }, { t: 'ביטול', v: null }]);
+      } else if (src.rec) {
+        const scope = await ask('אירוע חוזר', 'על מה לשמור את השינוי?', [{ t: 'רק על המופע הזה', v: 'one', cls: 'pri' }, { t: 'מהמופע הזה והלאה', v: 'fwd' }, { t: 'על כל הסדרה', v: 'all' }, { t: 'ביטול', v: null }]);
         if (!scope) return;
         const orig = S.events.find(x => x.id === src.id);
         delete S.evTodos[tk];
         if (scope === 'one') {
           orig.ex = [...(orig.ex || []), occDate];
-          const one = clean({ ...e, id: uid(), rep: 0, until: '', ex: [] });
+          const one = clean({ ...e, id: uid(), rec: null, until: '', ex: [] });
           S.events.push(one);
           if (todos.length) S.evTodos[tkey(one.id, one.date)] = todos;
+        } else if (scope === 'fwd') {
+          const oldUntil = orig.until;
+          orig.until = addDays(occDate, -1);
+          if (orig.until < orig.date) S.events = S.events.filter(x => x !== orig);
+          const nx = clean({ ...e, id: uid(), until: e.rec ? (e.until || oldUntil || '') : '', ex: [] });
+          if (nx.rec) nx.rec.a = weekStart(occDate);
+          S.events.push(nx);
+          for (const k in S.evTodos) if (k.startsWith(orig.id + '|') && k.split('|')[1] >= occDate) { S.evTodos[tkey(nx.id, k.split('|')[1])] = S.evTodos[k]; delete S.evTodos[k]; }
+          if (todos.length) S.evTodos[tkey(nx.id, e.date)] = todos;
         } else {
           const shift = diffDays(occDate, e.date);
-          Object.assign(orig, clean({ ...e, id: orig.id, ex: (orig.ex || []).map(x => addDays(x, shift)), date: addDays(orig.date, shift) }));
-          if (!orig.rep) orig.date = e.date;
+          let r = e.rec;
+          if (r && !recChanged && shift) { // הזזת תאריך = הזזת כל הסדרה
+            const L = r.n * 7, np = [...Array(r.n)].map(() => []);
+            r.p.forEach((days, i) => days.forEach(dd => { const pos = mod(i * 7 + dd + shift, L); np[Math.floor(pos / 7)].push(pos % 7); }));
+            r = { ...r, p: np };
+          }
+          Object.assign(orig, clean({ ...e, rec: r, id: orig.id, ex: r ? (orig.ex || []).map(x => addDays(x, shift)) : [], date: r ? addDays(orig.date, shift) : e.date }));
           if (todos.length) S.evTodos[tkey(orig.id, e.date)] = todos;
         }
       } else {
         const orig = S.events.find(x => x.id === src.id);
         Object.assign(orig, clean({ ...e, id: orig.id, ex: orig.ex || [] }));
+        if (orig.rec && !src.rec) orig.rec.a = weekStart(orig.date);
         delete S.evTodos[tk];
         if (todos.length) S.evTodos[tkey(orig.id, orig.date)] = todos;
       }
       save(); closeSheet(); render(); toast(isNew ? 'נוסף ללו״ז ✓' : 'נשמר ✓');
     });
-    $('#f-del', sh)?.addEventListener('click', async () => {
+    v('#f-del')?.addEventListener('click', async () => {
       let scope = 'all';
-      if (src.rep) {
-        scope = await ask('מחיקת אירוע חוזר', '', [{ t: 'רק את המופע הזה', v: 'one', cls: 'del' }, { t: 'מהמופע הזה והלאה', v: 'fwd', cls: 'del' }, { t: 'את כל הסדרה', v: 'all', cls: 'del' }, { t: 'ביטול', v: null }]);
-      } else scope = await ask('למחוק את האירוע?', '', [{ t: 'מחיקה', v: 'all', cls: 'del' }, { t: 'ביטול', v: null }]);
+      if (src.rec) scope = await ask('מחיקת אירוע חוזר', '', [{ t: 'רק את המופע הזה', v: 'one', cls: 'del' }, { t: 'מהמופע הזה והלאה', v: 'fwd', cls: 'del' }, { t: 'את כל הסדרה', v: 'all', cls: 'del' }, { t: 'ביטול', v: null }]);
+      else scope = await ask('למחוק את האירוע?', '', [{ t: 'מחיקה', v: 'all', cls: 'del' }, { t: 'ביטול', v: null }]);
       if (!scope) return;
       const orig = S.events.find(x => x.id === src.id);
       if (scope === 'one') { orig.ex = [...(orig.ex || []), occDate]; delete S.evTodos[tk]; }
@@ -655,14 +953,15 @@ function openEditor(src, occDate) {
       else { S.events = S.events.filter(x => x !== orig); for (const k in S.evTodos) if (k.startsWith(orig.id + '|')) delete S.evTodos[k]; }
       save(); closeSheet(); render(); toast('נמחק');
     });
-    $('#f-dup', sh)?.addEventListener('click', () => {
+    v('#f-dup')?.addEventListener('click', () => {
       read(); closeSheet();
-      setTimeout(() => openEditor({ ...e, id: null, ex: [], title: e.title }, e.date), 280);
+      setTimeout(() => openEditor({ ...e, id: null, ex: [], rec: e.rec ? { ...e.rec, a: weekStart(e.date) } : null }, e.date), 280);
     });
-    if (isNew) setTimeout(() => $('#f-title', sh).focus(), 350);
+    if (isNew && !src._fixedEnd) setTimeout(() => v('#f-title').focus(), 350);
+    else if (isNew) setTimeout(() => v('#f-title').focus(), 350);
   });
 }
-const clean = e => ({ id: e.id, title: e.title, cat: e.cat, date: e.date, start: e.start, end: e.end, allDay: !!e.allDay, rep: e.rep || 0, until: e.rep ? e.until || '' : '', ex: e.ex || [], rem: e.rem, notes: e.notes || '' });
+const clean = e => ({ id: e.id, title: e.title, cat: e.cat, date: e.date, start: e.start, end: e.end, span: e.span || 0, allDay: !!e.allDay, rec: e.rec ? { n: e.rec.n, a: e.rec.a || weekStart(e.date), p: e.rec.p } : null, until: e.rec ? e.until || '' : '', ex: e.ex || [], rem: e.rem, notes: e.notes || '' });
 
 /* ============================================================
    TODOS
@@ -681,7 +980,7 @@ function bindTodoList(root, get, set) {
   const commitAdd = inp => {
     const v = inp.value.trim(); if (!v) return false;
     inp.value = ''; const list = get(); list.push({ id: uid(), text: v, done: false }); set(list);
-    const n = $('[data-a="add"]', root) || root.querySelector('input[data-a="add"]'); n && n.focus(); return true;
+    const n = root.querySelector('input[data-a="add"]'); n && n.focus(); return true;
   };
   root.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
@@ -698,52 +997,53 @@ function bindTodoList(root, get, set) {
     }
   });
 }
+// משימות של אירוע שייכות ליום שבו המופע מתחיל
 function allTodos(d) {
   let out = [...(S.dayTodos[d] || [])];
-  for (const e of eventsOn(d)) out = out.concat(S.evTodos[tkey(e.id, d)] || []);
+  for (const g of segmentsOn(d)) if (g.first) out = out.concat(S.evTodos[tkey(g.e.id, d)] || []);
   return out;
 }
 const openTodos = d => allTodos(d).some(t => !t.done);
 
 function openTodoSheet(d) {
   const draw = sh => {
-    const evs = eventsOn(d);
+    const segs = segmentsOn(d);
     let h = `<div class="tsec" data-sec="day"><h3><i></i>כללי ליום</h3>${todoListHTML(S.dayTodos[d] || [], 'day')}</div>`;
-    for (const e of evs) {
-      const c = cat(e.cat);
-      h += `<div class="tsec" data-sec="${e.id}" style="--c:${c.color}"><h3><i></i>${esc(e.title || 'ללא שם')} <small>${e.allDay ? 'כל היום' : e.start}</small></h3>${todoListHTML(S.evTodos[tkey(e.id, d)] || [], 'ev')}</div>`;
+    for (const g of segs) {
+      const c = cat(g.e.cat);
+      h += `<div class="tsec" data-sec="${g.e.id}" data-o="${g.o}" style="--c:${c.color}"><h3><i></i>${esc(g.e.title || 'ללא שם')} <small>${g.e.allDay ? 'כל היום' : g.first ? g.e.start : 'המשך'}</small></h3>${todoListHTML(S.evTodos[tkey(g.e.id, g.o)] || [], 'ev')}</div>`;
     }
-    if (!evs.length) h += '<div class="empty-note">אין אירועים ביום הזה – אפשר להוסיף משימות כלליות למעלה.</div>';
+    if (!segs.length) h += '<div class="empty-note">אין אירועים ביום הזה – אפשר להוסיף משימות כלליות למעלה.</div>';
     $('.sh-body', sh).innerHTML = h;
     $$('.tsec', sh).forEach(sec => {
-      const id = sec.dataset.sec;
-      const get = () => JSON.parse(JSON.stringify(id === 'day' ? (S.dayTodos[d] || []) : (S.evTodos[tkey(id, d)] || [])));
+      const id = sec.dataset.sec, o = sec.dataset.o;
+      const key = id === 'day' ? null : tkey(id, o);
+      const get = () => JSON.parse(JSON.stringify(id === 'day' ? (S.dayTodos[d] || []) : (S.evTodos[key] || [])));
       const set = list => {
-        const k = id === 'day' ? null : tkey(id, d);
         if (id === 'day') { if (list.length) S.dayTodos[d] = list; else delete S.dayTodos[d]; }
-        else { if (list.length) S.evTodos[k] = list; else delete S.evTodos[k]; }
+        else { if (list.length) S.evTodos[key] = list; else delete S.evTodos[key]; }
         save();
         const focusAdd = document.activeElement && document.activeElement.dataset.a === 'add' && sec.contains(document.activeElement);
-        $('.tsec[data-sec="' + id + '"]', sh).innerHTML = $('h3', sec).outerHTML + todoListHTML(list, id === 'day' ? 'day' : 'ev');
+        sec.innerHTML = $('h3', sec).outerHTML + todoListHTML(list, id === 'day' ? 'day' : 'ev');
         if (focusAdd) $('input[data-a="add"]', sec).focus();
       };
       bindTodoList(sec, get, set);
     });
   };
-  openSheet('✓ משימות · ' + esc(DAYS[dow(d)] + ' ' + short(d)), '', draw, { onClose: render });
+  openSheet('✓ משימות · ' + esc(DAYS[dow(d)] + ' ' + short(d)), '', draw, { onClose: () => render() });
 }
 
 /* ============================================================
    DAY DETAIL (from week all-day tap)
    ============================================================ */
 function openDayInfo(d) {
-  const hs = holOn(d), ad = eventsOn(d).filter(e => e.allDay);
+  const hs = holOn(d), ad = segmentsOn(d).filter(g => g.e.allDay);
   const body = `<div class="card">${hs.map(h => `<div class="chip h-${h.t}" style="font-size:14px;padding:6px 10px;margin:4px 0">${esc(h.n)}</div>`).join('')}
-    ${ad.map(e => `<div class="chip ev-ad" data-ev="${e.id}" style="font-size:14px;padding:6px 10px;margin:4px 0;background:${cat(e.cat).color}">${esc(e.title)}</div>`).join('')}</div>
+    ${ad.map(g => `<div class="chip ev-ad" data-ev="${g.e.id}" data-o="${g.o}" style="font-size:14px;padding:6px 10px;margin:4px 0;background:${cat(g.e.cat).color}">${esc(g.e.title)}</div>`).join('')}</div>
     <div class="btns"><button class="btn pri" id="gday">לתצוגת היום</button></div>`;
   openSheet(esc(longDate(d)), body, sh => {
     $('#gday', sh).onclick = () => { closeSheet(); cur = d; setView('day'); };
-    sh.addEventListener('click', e => { const c = e.target.closest('[data-ev]'); if (c) { closeSheet(); const ev = S.events.find(x => x.id === c.dataset.ev); setTimeout(() => openEditor(ev, d), 280); } });
+    sh.addEventListener('click', e => { const c = e.target.closest('[data-ev]'); if (c) { closeSheet(); const ev = S.events.find(x => x.id === c.dataset.ev); setTimeout(() => openEditor(ev, c.dataset.o), 280); } });
   });
 }
 
@@ -784,11 +1084,11 @@ function openSettings() {
       <div class="lbl" style="margin-top:10px">סוף הסמסטר (ברירת מחדל לאירועים חוזרים)</div>
       <input type="date" class="field" id="s-until" value="${S.settings.until || ''}">
     </div>
-    <div class="hint" style="text-align:center;margin-bottom:10px">צביטה בלו״ז = יותר/פחות שעות במסך · החלקה לצדדים = שבוע/יום הבא</div>`;
+    <div class="hint" style="text-align:center;margin-bottom:10px">צביטה = יותר/פחות שעות במסך · החלקה לצדדים = הבא/הקודם · לחיצה ארוכה וגרירה = אירוע חדש</div>`;
   openSheet('הגדרות', body, sh => {
     $('#s-cats', sh).addEventListener('click', e => { const li = e.target.closest('[data-c]'); if (li) openCatEditor(li.dataset.c === 'new' ? null : li.dataset.c); });
     $('#s-rem', sh).onchange = e => { S.settings.rem = +e.target.value; save(); };
-    $('#s-name', sh).oninput = e => { $('#s-namehint', sh).textContent = (e.target.value.trim() ? 'Be OnIt, ' + e.target.value.trim() + '\u200E!' : 'OnIt'); };
+    $('#s-name', sh).oninput = e => { $('#s-namehint', sh).textContent = (e.target.value.trim() ? 'Be OnIt, ' + e.target.value.trim() + '‎!' : 'OnIt'); };
     $('#s-name', sh).onchange = e => { S.settings.name = e.target.value.trim(); save(); };
     $('#s-until', sh).onchange = e => { S.settings.until = e.target.value; save(); };
     $('#s-savecode', sh).onclick = async () => {
@@ -800,7 +1100,7 @@ function openSettings() {
       toast('מתחבר…');
       const r = await call({ action: 'ping' });
       if (r.ok) {
-        if (r.hasData && (!S.events.length) ) {
+        if (r.hasData && (!S.events.length)) {
           const yes = await ask('נמצא גיבוי בגוגל', `גיבוי מ-${new Date(r.savedAt).toLocaleString('he-IL')}. לשחזר אותו לטלפון?`, [{ t: 'כן, לשחזר', v: 1, cls: 'pri' }, { t: 'לא', v: 0 }]);
           if (yes) { await restore(); return; }
         }
@@ -884,7 +1184,7 @@ async function importFile(f) {
     const ok = await ask('טעינת גיבוי', `בקובץ ${d.events.length} אירועים. הלו״ז שבטלפון יוחלף בתוכן הקובץ.`, [{ t: 'לטעון', v: 1, cls: 'pri' }, { t: 'ביטול', v: 0 }]);
     if (!ok) return;
     const keepSync = S.settings.sync;
-    S = d; S.settings = S.settings || {}; if (!S.settings.sync && keepSync) S.settings.sync = keepSync;
+    S = migrate(d); S.settings = S.settings || {}; if (!S.settings.sync && keepSync) S.settings.sync = keepSync;
     save(); closeSheet(); render(); toast('הגיבוי נטען ✓');
   } catch (e) { toast('הקובץ לא נראה כמו גיבוי של הלו״ז'); }
 }
@@ -912,8 +1212,7 @@ function scheduleSync() { updSync(); if (!syncCode()) return; clearTimeout(syncT
 async function sync(force) {
   if (!syncCode() || syncing) return;
   if (!M.dirty && !force) return;
-  // הגנה: מכשיר חדש וריק לא ידרוס גיבוי קיים בגוגל
-  if (!M.lastSync && !S.events.length && !Object.keys(S.dayTodos).length) return;
+  if (!M.lastSync && !S.events.length && !Object.keys(S.dayTodos).length) return; // מכשיר חדש וריק לא ידרוס גיבוי
   if (!navigator.onLine) { updSync(); return; }
   syncing = true; updSync();
   const r = await call({ action: 'save', data: S, reminders: buildReminders() });
@@ -926,7 +1225,7 @@ async function restore() {
   const r = await call({ action: 'load' });
   if (!r.ok) return toast('השחזור נכשל: ' + r.error, 3500);
   if (!r.data) return toast('עוד אין גיבוי בגוגל');
-  const code = S.settings.sync; S = r.data; S.settings = S.settings || {}; S.settings.sync = code;
+  const code = S.settings.sync; S = migrate(r.data); S.settings = S.settings || {}; S.settings.sync = code;
   localStorage.setItem(KEY, JSON.stringify(S)); M.dirty = false; M.lastSync = Date.now(); saveMeta();
   closeSheet(); render(); updSync(); toast('שוחזר ✓');
 }
@@ -953,7 +1252,8 @@ function buildReminders() {
       const start = new Date(y, m - 1, dd, Math.floor(st / 60), st % 60).getTime();
       const at = start - e.rem * 60000;
       if (at < now - 60000) continue;
-      const when = (e.allDay ? 'כל היום' : e.start + '–' + e.end) + ' · ' + longDate(d);
+      const endD = addDays(d, e.span || 0);
+      const when = (e.allDay ? (e.span ? 'עד ' + longDate(endD) : 'כל היום') : e.start + '–' + e.end + (e.span ? ' (' + longDate(endD) + ')' : '')) + ' · ' + longDate(d);
       const tds = (S.evTodos[tkey(e.id, d)] || []).filter(t => !t.done).map(t => t.text);
       const subj = '⏰ ' + (e.title || 'אירוע') + (e.allDay ? ' – היום' : ' – ' + e.start);
       const txt = [when, 'קטגוריה: ' + c.name, e.notes ? 'הערות: ' + e.notes : '', tds.length ? 'משימות:\n• ' + tds.join('\n• ') : ''].filter(Boolean).join('\n');
@@ -974,7 +1274,7 @@ function banners() {
   const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
   if (ios && !standalone && !sessionStorage.getItem('luz-noinst')) {
     b.innerHTML = `<div class="banner"><span style="font-size:22px">📲</span><div><b>להתקנה במסך הבית</b>לוחצים על כפתור השיתוף ⬆︎ ואז "הוספה למסך הבית". חשוב להתקין לפני שמכניסים מידע.</div><button class="x" id="bx">✕</button></div>`;
-    $('#bx').onclick = () => { sessionStorage.setItem('luz-noinst', 1); hideBanner(); requestAnimationFrame(() => resetZoom('now')); };
+    $('#bx').onclick = () => { sessionStorage.setItem('luz-noinst', 1); hideBanner(); requestAnimationFrame(() => { resetZoom('now'); if (view === 'month') render(); }); };
     return;
   }
   if (!syncCode() && S.events.length && Date.now() - (M.lastBackup || M.firstUse || 0) > 7 * 864e5) {
@@ -994,15 +1294,15 @@ function welcome() {
       <input class="field" id="w-name" maxlength="30" placeholder="השם שלך" value="${esc(S.settings.name || '')}" enterkeyhint="done">
       <div class="hint">ככה יגיעו התזכורות במייל: <b id="w-prev" dir="ltr" style="unicode-bidi:isolate">Be OnIt!</b></div></div>
     <div class="card" style="line-height:1.75">
-      ➕ <b>אירוע חדש</b> – הכפתור הצבעוני, או נגיעה בשעה ריקה בלו״ז<br>
+      ➕ <b>אירוע חדש</b> – הכפתור הצבעוני, נגיעה בשעה ריקה, או לחיצה ארוכה וגרירה<br>
       🤏 <b>צביטה</b> – לראות יותר או פחות שעות במסך<br>
-      👆 <b>החלקה לצדדים</b> – לשבוע או ליום הבא<br>
-      📅 <b>נגיעה ביום בכותרת</b> – תצוגת יום עם המשימות שלו<br>
-      🔁 <b>שיעורים קבועים</b> – "כל שבוע" או "כל שבועיים", עד סוף הסמסטר<br>
+      👆 <b>החלקה לצדדים</b> – לחודש, לשבוע או ליום הבא<br>
+      📅 <b>נגיעה ביום</b> – תצוגת יום עם המשימות שלו<br>
+      🔁 <b>אירועים חוזרים</b> – כל שבוע, כל כמה שבועות, או סירוגין בין ימים<br>
       🎨 <b>קטגוריות וצבעים</b> – בהגדרות ⚙
     </div>
     <div class="btns"><button class="btn pri" id="w-go">יאללה, מתחילות</button></div>`, sh => {
-    const inp = $('#w-name', sh), prev = () => $('#w-prev', sh).textContent = inp.value.trim() ? 'Be OnIt, ' + inp.value.trim() + '\u200E!' : 'Be OnIt!';
+    const inp = $('#w-name', sh), prev = () => $('#w-prev', sh).textContent = inp.value.trim() ? 'Be OnIt, ' + inp.value.trim() + '‎!' : 'Be OnIt!';
     inp.oninput = prev; prev();
     inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); };
     $('#w-go', sh).onclick = () => { const v = inp.value.trim(); if (v) { S.settings.name = v; save(); } closeSheet(); };
@@ -1012,14 +1312,22 @@ function welcome() {
 /* ============================================================
    INIT
    ============================================================ */
-function setView(v) { view = v; localStorage.setItem('luz-view', v); render(); resetZoom(cur === today() || (v === 'week' && weekStart(cur) === weekStart(today())) ? 'now' : 8); }
+function setView(v) {
+  const was = view; view = v; localStorage.setItem('luz-view', v);
+  render(was !== v ? 'z' : null);
+  resetZoom(cur === today() || (v === 'week' && weekStart(cur) === weekStart(today())) ? 'now' : 8);
+}
 function init() {
   $$('.seg button').forEach(b => b.onclick = () => setView(b.dataset.v));
   $('#prev').onclick = () => go(-1); $('#next').onclick = () => go(1);
-  $('#btnToday').onclick = () => { cur = today(); render(); resetZoom('now'); };
+  $('#btnToday').onclick = () => { const dir = today() > cur ? 1 : today() < cur ? -1 : 0; cur = today(); render(dir ? (dir > 0 ? 'l' : 'r') : null); resetZoom('now'); };
   $('#btnSet').onclick = openSettings;
   $('#syncIco').onclick = () => toast(syncState().text, 3000);
-  $('#fab').onclick = () => newEvent(view === 'day' ? cur : (weekStart(cur) === weekStart(today()) ? today() : weekStart(cur)));
+  $('#fab').onclick = () => {
+    if (view === 'day') return newEvent(cur);
+    if (view === 'month') return newEvent(monthStart(cur) === monthStart(today()) ? today() : monthStart(cur));
+    newEvent(weekStart(cur) === weekStart(today()) ? today() : weekStart(cur));
+  };
   $('#todobar').onclick = () => openTodoSheet(cur);
   $('#heads').addEventListener('click', e => { const h = e.target.closest('[data-d]'); if (h) { cur = h.dataset.d; setView('day'); } });
   $('#allday').addEventListener('click', e => {
@@ -1028,19 +1336,24 @@ function init() {
     const c = e.target.closest('.adc[data-d]'); if (c && c.children.length) openDayInfo(c.dataset.d);
   });
   $('#grid').addEventListener('click', e => {
-    const ev = e.target.closest('.ev');
+    if (Date.now() - suppressClick < 500) return;
+    const ev = e.target.closest('.ev:not(.ghost)');
     if (ev) return openEditor(S.events.find(x => x.id === ev.dataset.ev), ev.dataset.d);
     const col = e.target.closest('.col'); if (!col) return;
     const y = e.clientY - col.getBoundingClientRect().top;
     newEvent(col.dataset.d, Math.min(23 * 60, Math.max(0, Math.floor(y / hourH * 2) * 30)));
   });
+  $('#month').addEventListener('click', e => {
+    if (Date.now() - suppressClick < 500) return;
+    const c = e.target.closest('.mc[data-d]'); if (!c) return;
+    cur = c.dataset.d; setView('day');
+  });
   window.addEventListener('online', () => { updSync(); sync(); });
   window.addEventListener('offline', updSync);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { if (M.dirty) sync(); if (today() !== lastDay) { lastDay = today(); cur = today(); render(); } } });
-  window.addEventListener('resize', () => { bounds(); setH(hourH); });
+  window.addEventListener('resize', () => { bounds(); setH(hourH); if (view === 'month') render(); });
   initGestures();
   render(); banners(); resetZoom('now'); updSync();
-  // סנכרון בפתיחה, ופעם ביום גם בלי שינויים (כדי לרענן את חלון התזכורות)
   if (syncCode() && (M.dirty || Date.now() - (M.lastSync || 0) > 20 * 3600e3)) sync(true);
   welcome();
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => { });
