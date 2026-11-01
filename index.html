@@ -800,7 +800,8 @@ function openEditor(src, occDate) {
     <div class="card"><input class="bigtitle" id="f-title" placeholder="מה בלו״ז?" value="${esc(e.title)}" maxlength="120"></div>
     <div class="card"><div class="lbl">קטגוריה</div><div class="cats" id="f-cats"></div></div>
     <div class="card"><div class="lbl">מיקום</div>
-      <div class="locrow"><input class="field" id="f-loc" placeholder="כתובת או שם מקום" value="${esc(e.loc || '')}" autocomplete="off" enterkeyhint="search"><button class="navbtn" id="f-nav" title="ניווט">🧭</button></div>
+      <div class="locrow"><input class="field" id="f-loc" placeholder="כתובת או שם מקום" value="${esc(e.loc || '')}" autocomplete="off" enterkeyhint="search"><button class="navbtn" id="f-find" title="חיפוש">🔍</button><button class="navbtn" id="f-nav" title="ניווט">🧭</button></div>
+      <div class="hint" id="f-lochint">${e.ll ? '✓ כתובת מאומתת' : 'אפשר לכתוב חופשי, או ללחוץ 🔍 כדי למצוא כתובת מדויקת'}</div>
       <div id="f-locres"></div>
     </div>
     <div id="f-warn"></div>
@@ -872,7 +873,7 @@ function openEditor(src, occDate) {
       if (e.allDay) { v('#f-dur').textContent = days > 0 ? `${days + 1} ימים` : ''; return; }
       const m = b - a; if (m <= 0) { v('#f-dur').textContent = '⚠️ הסיום לפני ההתחלה'; return; }
       const h = Math.floor(m / 60), mm = m % 60;
-      v('#f-dur').textContent = 'משך: ' + (h >= 24 ? Math.floor(h / 24) + ' ימים ו-' + (h % 24) + ' שעות' : (h ? h + ' שעות' : '') + (h && mm ? ' ו-' : '') + (mm ? mm + ' דקות' : ''));
+      v('#f-dur').textContent = 'משך: ' + (h >= 24 ? Math.floor(h / 24) + ' ימים ו-' + (h % 24) + ' שעות' : (h ? (h === 1 ? 'שעה' : h === 2 ? 'שעתיים' : h + ' שעות') : '') + (h && mm ? ' ו-' : '') + (mm ? mm + ' דקות' : ''));
     };
     const drawWarn = () => {
       read();
@@ -938,7 +939,27 @@ function openEditor(src, occDate) {
     ['#f-edate', '#f-end'].forEach(id => v(id).addEventListener('change', () => { durText(); drawWarn(); }));
     v('#f-until').addEventListener('change', () => { drawRec(); drawWarn(); });
     bindTodoList(v('#f-todos'), () => todos, t => { todos = t; drawTodos(); });
-    v('#f-nav').addEventListener('click', () => { const t = v('#f-loc').value.trim(); if (!t) return toast('צריך קודם לכתוב כתובת'); navigate(t, t === (e.loc || '') ? e.ll : null); });
+    v('#f-nav').addEventListener('click', () => { const t = v('#f-loc').value.trim(); if (!t) return toast('צריך קודם לכתוב כתובת'); navigate(t, e.ll && t === e.loc ? e.ll : null); });
+    const findLoc = async () => {
+      const q = v('#f-loc').value.trim();
+      if (q.length < 2) return toast('צריך לכתוב כתובת או שם מקום');
+      if (!syncCode()) return toast('חיפוש כתובות עובד כשחשבון הגוגל מחובר (⚙ הגדרות)', 3000);
+      if (!navigator.onLine) return toast('אין קליטה – אפשר לשמור את הכתובת כמו שהיא', 3000);
+      v('#f-locres').innerHTML = '<div class="hint">מחפש…</div>';
+      const r = await call({ action: 'geo', q });
+      if (!r.ok) { v('#f-locres').innerHTML = ''; return toast('החיפוש נכשל: ' + r.error, 3500); }
+      if (!r.results || !r.results.length) { v('#f-locres').innerHTML = '<div class="hint">לא נמצאו תוצאות – אפשר לנסות לכתוב גם עיר</div>'; return; }
+      v('#f-locres').innerHTML = '<div class="locres">' + r.results.map((x, i) => `<button data-i="${i}">📍 ${esc(x.a.replace(/,\s*ישראל$/, ''))}</button>`).join('') + '</div>';
+      v('#f-locres').onclick = ev => {
+        const b = ev.target.closest('[data-i]'); if (!b) return;
+        const x = r.results[+b.dataset.i];
+        const addr = x.a.replace(/,\s*ישראל$/, ''); v('#f-loc').value = addr; e.loc = addr; e.ll = { lat: x.lat, lng: x.lng };
+        v('#f-locres').innerHTML = ''; v('#f-lochint').textContent = '✓ כתובת מאומתת';
+      };
+    };
+    v('#f-find').addEventListener('click', findLoc);
+    v('#f-loc').addEventListener('keydown', ev => { if (ev.key === 'Enter') { ev.preventDefault(); findLoc(); } });
+    v('#f-loc').addEventListener('input', () => { if (e.ll && v('#f-loc').value.trim() !== e.loc) { e.ll = null; v('#f-lochint').textContent = 'אפשר לכתוב חופשי, או ללחוץ 🔍 כדי למצוא כתובת מדויקת'; } });
     v('#f-loc').addEventListener('change', drawWarn);
 
     v('#f-save').addEventListener('click', async () => {
