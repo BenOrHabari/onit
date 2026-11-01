@@ -277,7 +277,7 @@ function save() {
   M.dirty = true; saveMeta(); scheduleSync();
 }
 const userName = () => (S.settings.name || '').trim();
-const senderName = () => userName() ? 'Be OnIt, ' + userName() + '!' : 'OnIt';
+const senderName = () => userName() ? 'Be OnIt, ' + userName() + '\u200E!' : 'OnIt';
 const cat = id => S.cats.find(c => c.id === id) || S.cats[0] || { name: '', color: '#999' };
 
 /* ---------- events & recurrence ---------- */
@@ -778,7 +778,7 @@ function openSettings() {
     <div class="card">
       <div class="lbl">השם שלך</div>
       <input class="field" id="s-name" maxlength="30" placeholder="איך קוראים לך?" value="${esc(S.settings.name || '')}">
-      <div class="hint" id="s-namehint">המיילים יגיעו מ: ${esc(senderName())}</div>
+      <div class="hint">המיילים יגיעו מ: <b id="s-namehint" dir="ltr" style="unicode-bidi:isolate">${esc(senderName())}</b></div>
       <div class="lbl" style="margin-top:10px">תזכורת ברירת מחדל</div>
       <select class="field" id="s-rem">${REM_OPTS.map(o => `<option value="${o[0]}" ${o[0] === S.settings.rem ? 'selected' : ''}>${o[1]}</option>`).join('')}</select>
       <div class="lbl" style="margin-top:10px">סוף הסמסטר (ברירת מחדל לאירועים חוזרים)</div>
@@ -788,7 +788,7 @@ function openSettings() {
   openSheet('הגדרות', body, sh => {
     $('#s-cats', sh).addEventListener('click', e => { const li = e.target.closest('[data-c]'); if (li) openCatEditor(li.dataset.c === 'new' ? null : li.dataset.c); });
     $('#s-rem', sh).onchange = e => { S.settings.rem = +e.target.value; save(); };
-    $('#s-name', sh).oninput = e => { $('#s-namehint', sh).textContent = 'המיילים יגיעו מ: ' + (e.target.value.trim() ? 'Be OnIt, ' + e.target.value.trim() + '!' : 'OnIt'); };
+    $('#s-name', sh).oninput = e => { $('#s-namehint', sh).textContent = (e.target.value.trim() ? 'Be OnIt, ' + e.target.value.trim() + '\u200E!' : 'OnIt'); };
     $('#s-name', sh).onchange = e => { S.settings.name = e.target.value.trim(); save(); };
     $('#s-until', sh).onchange = e => { S.settings.until = e.target.value; save(); };
     $('#s-savecode', sh).onclick = async () => {
@@ -992,7 +992,7 @@ function welcome() {
   openSheet('ברוכה הבאה ל-OnIt 💜', `
     <div class="card"><div class="lbl">איך קוראים לך?</div>
       <input class="field" id="w-name" maxlength="30" placeholder="השם שלך" value="${esc(S.settings.name || '')}" enterkeyhint="done">
-      <div class="hint">ככה יגיעו התזכורות במייל: <b id="w-prev">Be OnIt!</b></div></div>
+      <div class="hint">ככה יגיעו התזכורות במייל: <b id="w-prev" dir="ltr" style="unicode-bidi:isolate">Be OnIt!</b></div></div>
     <div class="card" style="line-height:1.75">
       ➕ <b>אירוע חדש</b> – הכפתור הצבעוני, או נגיעה בשעה ריקה בלו״ז<br>
       🤏 <b>צביטה</b> – לראות יותר או פחות שעות במסך<br>
@@ -1002,7 +1002,7 @@ function welcome() {
       🎨 <b>קטגוריות וצבעים</b> – בהגדרות ⚙
     </div>
     <div class="btns"><button class="btn pri" id="w-go">יאללה, מתחילות</button></div>`, sh => {
-    const inp = $('#w-name', sh), prev = () => $('#w-prev', sh).textContent = inp.value.trim() ? 'Be OnIt, ' + inp.value.trim() + '!' : 'Be OnIt!';
+    const inp = $('#w-name', sh), prev = () => $('#w-prev', sh).textContent = inp.value.trim() ? 'Be OnIt, ' + inp.value.trim() + '\u200E!' : 'Be OnIt!';
     inp.oninput = prev; prev();
     inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); };
     $('#w-go', sh).onclick = () => { const v = inp.value.trim(); if (v) { S.settings.name = v; save(); } closeSheet(); };
